@@ -10,18 +10,14 @@ library(tidyverse)
 
 ##Read and clean the data: 
 
-Retaining line, station name, station latitude / longitude, routes served, entry, vending, entrance type, and ADA compliance. 
+Reading in csv file and adjusting the variable names to lowercase snakecase. Retaining line, station name, station latitude / longitude, routes served, entry, vending, entrance type, and ADA compliance. Also converting the entry variable from character (YES vs NO) to a logical variable. 
+
 
 ```{r Reading and Cleaning}
 options(tibble.print_min = 3)
 
 NYC_transit_data = read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>% 
   janitor::clean_names() %>% 
-  select(line, station_name, station_latitude, station_longitude, route1:route11, entry, vending, entrance_type, ada)
-```
-
-Converting the entry variable from character (YES vs NO) to a logical variable (the ifelse or recode function may be useful).
-
-```{r Converting Variables}
-
+  select(line, station_name, station_latitude, station_longitude, route1:route11, entry, vending, entrance_type, ada) %>% 
+  mutate(entry = recode(entry, "YES" = TRUE, "NO" = FALSE))
 ```
