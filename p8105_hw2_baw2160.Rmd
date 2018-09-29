@@ -7,8 +7,9 @@ output: github_document
 ```{r Set Up, include=FALSE}
 library(tidyverse)
 ```
+##Problem One:
 
-##Read and clean the data: 
+###Read and clean the data: 
 
 Reading in csv file and adjusting the variable names to lowercase snakecase. Retaining line, station name, station latitude / longitude, routes served, entry, vending, entrance type, and ADA compliance. Also converting the entry variable from character (YES vs NO) to a logical variable. 
 
@@ -21,3 +22,25 @@ NYC_transit_data = read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_
   select(line, station_name, station_latitude, station_longitude, route1:route11, entry, vending, entrance_type, ada) %>% 
   mutate(entry = recode(entry, "YES" = TRUE, "NO" = FALSE))
 ```
+Write a short paragraph about this dataset – explain briefly what variables the dataset contains, describe your data cleaning steps so far, and give the dimension (rows x columns) of the resulting dataset. Are these data tidy?
+
+### Information about the dataset:
+
+This dataset contains information about the NYC transit system. Each observation is every potential station in the city, organized by which line it is on. For each station that is observed, information is included about that station, including location, existence of exits or entrances, and accessibility. Each of these details are variables that the observations can have information about.
+
+To clean the dataset, I've simply converted all variable names to lowercase snakecase and retained a subsection of variables from the original dataset:  
+
+* Where the station is (latitudinally and longitudinally) 
+* Whether there is an entrance and what type of entrance it is (stairs, elevator, etc.)
+* Whether there is a vendor (a small convenience store-like apparatus)
+* Whether the station is ADA accessible, and 
+* Which train uses the stations different routes (not all stations have the same number of routes)
+
+The data set has size `r dim(NYC_transit_data)[1]` x `r dim(NYC_transit_data)[2]` and I would consider this data tidy because each row is an observation, each column is a variable, and each value has a cell.
+
+###Answering some questions about the data:
+
+How many distinct stations are there? Note that stations are identified both by name and by line (e.g. 125th St A/B/C/D; 125st 1; 125st 4/5); the distinct function may be useful here.
+How many stations are ADA compliant?
+What proportion of station entrances / exits without vending allow entrance?
+Reformat data so that route number and route name are distinct variables. How many distinct stations serve the A train? Of the stations that serve the A train, how many are ADA compliant?
