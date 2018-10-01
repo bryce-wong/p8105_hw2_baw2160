@@ -79,9 +79,8 @@ Of the stations that serve the A train, how many are ADA compliant?
 ```{r}
 trashwheel_data = read_excel("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", sheet = "Mr. Trash Wheel", range = cell_cols("A:N")) %>%
   janitor::clean_names() %>%
-  filter(!is.na(dumpster), month != "Grand Total")
-
-trashwheel_rounded = round(trashwheel_data$sports_balls)
+  filter(!is.na(dumpster), month != "Grand Total") %>%
+  mutate(sports_balls = as.integer(round(sports_balls)))
 ```
 
 
