@@ -6,6 +6,7 @@ output: github_document
 ---
 ```{r Set Up, include=FALSE}
 library(tidyverse)
+library(readxl)
 ```
 ##Problem One:
 
@@ -62,7 +63,32 @@ How many distinct stations serve the A train?
 
 `r length(which(NYC_transit_tidy$route_name == "A"))` distinct stations serve the A train.
 
-
 Of the stations that serve the A train, how many are ADA compliant?
 
-`r length(which((NYC_transit_tidy$route_name == "A") & (NYC_transit_tidy$ada == "TRUE")))` stations.
+`r length(which((NYC_transit_tidy$route_name == "A") & (NYC_transit_tidy$ada == "TRUE")))`
+
+## Problem 2:
+
+### Read and clean the Mr. Trash Wheel sheet:
+
+* specify the sheet in the Excel file and to omit columns containing notes (using the range argument and cell_cols() function)
+* use reasonable variable names
+* omit rows that do not include dumpster-specific data
+* rounds the number of sports balls to the nearest integer and converts the result to an integer variable (using as.integer)
+
+```{r}
+trashwheel_data = read_excel("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", sheet = "Mr. Trash Wheel", range = cell_cols("A:N")) %>%
+  janitor::clean_names() %>%
+  filter(!is.na(dumpster), month != "Grand Total")
+
+trashwheel_rounded = round(trashwheel_data$sports_balls)
+```
+
+
+
+
+Read and clean precipitation data for 2016 and 2017. For each, omit rows without precipitation data and add a variable year. Next, combine datasets and convert month to a character variable (the variable month.name is built into R and should be useful).
+
+Write a paragraph about these data; you are encouraged to use inline R. Be sure to note the number of observations in both resulting datasets, and give examples of key variables. For available data, what was the total precipitation in 2017? What was the median number of sports balls in a dumpster in 2016?
+
+ stations.
