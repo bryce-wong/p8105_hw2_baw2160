@@ -120,3 +120,27 @@ Examples of key variables include:
 
 For available data, the total precipitation in 2017 was `r sum(precip_2017_data$total)`. The median number of sports balls in a dumpster in 2016 was `r median(subset(trashwheel_data, year == "2016")$sports_balls)`.
 
+## Problem Three:
+
+# install.packages("devtools")
+```{r}
+devtools::install_github("p8105/p8105.datasets")
+library(p8105.datasets)
+```
+
+```{r}
+brfss_data = brfss_smart2010 %>% 
+  filter(Topic == "Overall Health") %>% 
+  select(Year, Locationabbr, Locationdesc, Response, Data_value) %>% 
+  rename(location = Locationabbr, location_county = Locationdesc, year = Year, response = Response, proportion = Data_value) %>% 
+  spread(key = response, value = proportion) %>% 
+  janitor::clean_names() %>% 
+  mutate(high_health = excellent + very_good)
+```
+
+* format the data to use appropriate variable names;
+* focus on the “Overall Health” topic
+* exclude variables for class, topic, question, sample size, and everything from lower confidence limit to GeoLocation
+* structure data so that values for Response (“Excellent” to “Poor”) are column names / variables which indicate the proportion of subjects with each response (which are values of Data_value in the original dataset)
+* create a new variable showing the proportion of responses that were “Excellent” or “Very Good”
+
