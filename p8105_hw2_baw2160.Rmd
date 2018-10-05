@@ -142,7 +142,7 @@ library(p8105.datasets)
 brfss_data = brfss_smart2010 %>% 
   filter(Topic == "Overall Health") %>% 
   select(Year, Locationabbr, Locationdesc, Response, Data_value) %>% 
-  rename(location = Locationabbr, location_county = Locationdesc, year = Year, response = Response, proportion = Data_value) %>% 
+  rename(location_state = Locationabbr, location_county = Locationdesc, year = Year, response = Response, proportion = Data_value) %>% 
   spread(key = response, value = proportion) %>% 
   janitor::clean_names() %>% 
   mutate(high_health = excellent + very_good)
@@ -150,14 +150,14 @@ brfss_data = brfss_smart2010 %>%
 
 ### Answering some questions:
 ```{r}
-location_distinct = distinct(brfss_data, location_county, .keep_all = TRUE) 
-state_distinct = distinct(brfss_data, location, .keep_all = TRUE)
+county_distinct = distinct(brfss_data, location_county, .keep_all = TRUE) 
+state_distinct = distinct(brfss_data, location_state, .keep_all = TRUE)
 ```
 * How many unique locations are included in the dataset? 
-**Answer:** `r dim(location_distinct)[1]`
+**Answer:** `r dim(county_distinct)[1]`
 * Is every state represented? 
 **Answer:** `r dim(state_distinct)[1]` states are represented (DC got counted as a location) - so, every state is represented. 
-* What state is observed the most? **Answer:** `r tail(names(sort(table(location_distinct$location))), 1)`
+* What state is observed the most? **Answer:** `r tail(names(sort(table(county_distinct$location_state))), 1)`
 * In 2002, what is the median of the “Excellent” response value? **Answer:** `r median(subset(brfss_data, year == "2002")$excellent, na.rm = TRUE)`.
 * Make a histogram of “Excellent” response values in the year 2002.
 * Make a scatterplot showing the proportion of “Excellent” response values in New York County and Queens County (both in NY State) in each year from 2002 to 2010.
