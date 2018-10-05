@@ -128,6 +128,12 @@ devtools::install_github("p8105/p8105.datasets")
 library(p8105.datasets)
 ```
 
+* format the data to use appropriate variable names;
+* focus on the “Overall Health” topic
+* exclude variables for class, topic, question, sample size, and everything from lower confidence limit to GeoLocation
+* structure data so that values for Response (“Excellent” to “Poor”) are column names / variables which indicate the proportion of subjects with each response (which are values of Data_value in the original dataset)
+* create a new variable showing the proportion of responses that were “Excellent” or “Very Good”
+
 ```{r}
 brfss_data = brfss_smart2010 %>% 
   filter(Topic == "Overall Health") %>% 
@@ -138,9 +144,18 @@ brfss_data = brfss_smart2010 %>%
   mutate(high_health = excellent + very_good)
 ```
 
-* format the data to use appropriate variable names;
-* focus on the “Overall Health” topic
-* exclude variables for class, topic, question, sample size, and everything from lower confidence limit to GeoLocation
-* structure data so that values for Response (“Excellent” to “Poor”) are column names / variables which indicate the proportion of subjects with each response (which are values of Data_value in the original dataset)
-* create a new variable showing the proportion of responses that were “Excellent” or “Very Good”
+Using this dataset, do or answer the following:
 
+```{r}
+location_distinct = distinct(brfss_data, location_county, .keep_all = TRUE) 
+state_distinct = distinct(brfss_data, location, .keep_all = TRUE)
+```
+
+* How many unique locations are included in the dataset? 
+Answer: `r dim(location_distinct)[1]`
+* Is every state represented? 
+`r dim(state_distinct)[1]` states are represented (likely, DC got counted as a location) - so, every state is represented. 
+* What state is observed the most? `r tail(names(sort(table(location_distinct$location))), 1)`
+* In 2002, what is the median of the “Excellent” response value? `r median(subset(brfss_data, year == "2002")$excellent, na.rm = TRUE)`.
+* Make a histogram of “Excellent” response values in the year 2002.
+* Make a scatterplot showing the proportion of “Excellent” response values in New York County and Queens County (both in NY State) in each year from 2002 to 2010.
